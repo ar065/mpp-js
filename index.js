@@ -2,11 +2,17 @@ import WebSocket from "ws";
 import { EventEmitter } from "events";
 
 class Client extends EventEmitter {
-    constructor(uri, token) {
+    /**
+     * 
+     * @param {Object} options Options for client.
+     * @param {string} [options.ws] Websocket server address.
+     * @param {string} options.token Your bot token.
+     */
+    constructor(options) {
         super();
 
-        this.uri = uri || "wss://mppclone.com:8443/";
-        this.token = token;
+        this.uri = options.uri || "wss://mppclone.com:8443/";
+        this.token = options.token;
 
         this.ws = null;
         this.user = null;
