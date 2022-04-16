@@ -3,7 +3,6 @@ import { EventEmitter } from "events";
 
 class Client extends EventEmitter {
     /**
-     * 
      * @param {Object} options Options for client.
      * @param {string} [options.ws] Websocket server address.
      * @param {string} options.token Your bot token.
