@@ -2,6 +2,8 @@ class RateLimit {
     constructor(period, limit) {
         this.period = period;
         this.limit = limit;
+        this.usageStart = 0;
+        this.used = 0;
     }
 
     setParams(period, limit) {
