@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wolfy01/MPPClient.js.git"
+    "url": "git+https://github.com/wolfy01/mpp-js.git"
   },
   "keywords": [
     "MPP",
@@ -21,9 +21,9 @@
   "author": "Wolfy01",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/wolfy01/MPPClient.js/issues"
+    "url": "https://github.com/wolfy01/mpp-js/issues"
   },
-  "homepage": "https://github.com/wolfy01/MPPClient.js#readme",
+  "homepage": "https://github.com/wolfy01/mpp-js#readme",
   "packageManager": "yarn@3.2.0",
   "dependencies": {
     "ws": "^8.5.0"
