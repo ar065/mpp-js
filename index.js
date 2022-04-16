@@ -31,7 +31,6 @@ class Client extends EventEmitter {
         this.noteBuffer = [];
 
         this.bindEventListeners();
-        this.emit("status", "(Offline mode)");
 
         this.offlineSettings = {
             channel: {
@@ -69,8 +68,6 @@ class Client extends EventEmitter {
         if (!this.canConnect || this.isConnected() || this.isConnecting()) return;
         const self = this;
 
-        this.emit("status", "Connecting...");
-
         this.ws = new WebSocket(this.uri, {
             origin: "https://www.multiplayerpiano.com"
         });
@@ -85,7 +82,6 @@ class Client extends EventEmitter {
             clearInterval(self.noteFlushInterval);
 
             self.emit("disconnect", evt);
-            self.emit("status", "Offline mode");
 
             // reconnect!
             if (self.connectionTime) {
@@ -128,7 +124,6 @@ class Client extends EventEmitter {
             }, 200);
 
             self.emit("connect");
-            self.emit("status", "Joining channel...");
         });
         this.ws.addEventListener("message", async function (evt) {
             const transmission = JSON.parse(evt.data);
@@ -366,6 +361,38 @@ class Client extends EventEmitter {
             m: "t",
             e: Date.now()
         }]);
+    };
+
+    sendChat(message) {
+        this.sendArray([{m: "a", message}]);
+    };
+    
+    userset(set) {
+        this.sendArray([{m: "userset", set}]);
+    };
+    
+    setName(name) {
+        this.userset({name});
+    };
+
+    setColor(color) {
+        this.userset({color});
+    }
+    
+    moveMouse(x, y) {
+        this.sendArray([{m: "m", x, y}]);
+    };
+    
+    kickBan(_id, ms) {
+        this.sendArray([{m: "kickban", _id, ms}]);
+    };
+    
+    chown(id) {
+        this.sendArray([{m: "chown", id}]);
+    };
+    
+    chset(set) {
+        this.sendArray([{m: "chset", set}]);
     };
 };
 
