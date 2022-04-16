@@ -1,0 +1,28 @@
+{
+  "name": "mpp.js",
+  "version": "1.0.0",
+  "description": "A client for multiplayerpiano, specfically for NodeJs enviroments.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wolfy01/MPP.JS.git"
+  },
+  "keywords": [
+    "MPP",
+    "Multiplayerpiano"
+  ],
+  "author": "Wolfy01",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wolfy01/MPP.JS/issues"
+  },
+  "homepage": "https://github.com/wolfy01/MPP.JS#readme",
+  "packageManager": "yarn@3.2.0",
+  "dependencies": {
+    "ws": "^8.5.0"
+  }
+}
