@@ -302,7 +302,7 @@ class Client extends EventEmitter {
         const now = Date.now();
         const target = time - now;
         const duration = 1000;
-        const step = 0;
+        let step = 0;
         const steps = 50;
         const step_ms = duration / steps;
         const difference = target - this.serverTimeOffset;
