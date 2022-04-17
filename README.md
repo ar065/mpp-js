@@ -20,5 +20,5 @@ client.on("a", msg => {
 ```
 
 # Contributing is welcome!
-### Please make a pullrequest to contribute to this project.
+### Please make a pull request to contribute to this project.
 ### If anyone is willing to work on the documentation for this, it would be greatly appreciated.
