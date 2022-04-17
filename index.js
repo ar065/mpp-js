@@ -1,7 +1,7 @@
 import WebSocket from "ws";
 import { EventEmitter } from "events";
-import ValidateString from "./src/ValidateString";
-import RateLimits from "./src/RateLimits";
+import ValidateString from "./src/ValidateString.js";
+import RateLimits from "./src/RateLimits.js";
 
 class Client extends EventEmitter {
     /**

@@ -1,4 +1,4 @@
-import RateLimit from "./RateLimit";
+import RateLimit from "./RateLimit.js";
 import {
     Chat,
     Note,
@@ -16,7 +16,7 @@ import {
     // DiscordLogin,
     ChangeChannel,
     // ConnectionAttempt
-} from "./RateLimitSettings";
+} from "./RateLimitSettings.js";
 
 class RateLimits {
     constructor() {
