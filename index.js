@@ -6,7 +6,7 @@ import RateLimits from "./src/RateLimits.js";
 class Client extends EventEmitter {
     /**
      * @param {Object} options Options for client.
-     * @param {string} [options.ws] Websocket server address.
+     * @param {string} [options.uri] Websocket server address.
      * @param {string} options.token Your bot token.
      */
     constructor(options) {
