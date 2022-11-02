@@ -1,6 +1,7 @@
 import WebSocket from "ws";
 import { EventEmitter } from "events";
 import ValidateString from "./src/ValidateString.js";
+import { Http, WebSocket as wsRCs } from "./src/ResponseCodes.js";
 
 class Client extends EventEmitter {
     /**
@@ -15,6 +16,9 @@ class Client extends EventEmitter {
         this.uri = options.uri || "wss://mppclone.com:8443/";
         this.unsafe = options.unsafe || false;
         this.token = options.token;
+
+        this.httpResponseCodes = Http;
+        this.webSocketResponseCodes = wsRCs;
 
         this.ws = null;
         this.user = null;
