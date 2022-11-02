@@ -1,8 +1,13 @@
-import WebSocket from "ws";
-import { EventEmitter } from "events";
-import ValidateString from "./src/ValidateString.js";
+// import WebSocket from "ws";
+// import { EventEmitter } from "events";
+// import ValidateString from "./src/ValidateString.js";
+// // prettier-ignore
+// import { HttpResponseCodes, WebSocketResponseCodes } from "./src/ResponseCodes.js";
+const WebSocket = require("ws");
+const { EventEmitter } = require("events");
+const ValidateString = require("./src/ValidateString.js");
 // prettier-ignore
-import { HttpResponseCodes, WebSocketResponseCodes } from "./src/ResponseCodes.js";
+const { HttpResponseCodes, WebSocketResponseCodes } = require("./src/ResponseCodes.js")
 
 class Client extends EventEmitter {
     /**
@@ -439,4 +444,5 @@ class Client extends EventEmitter {
     }
 }
 
-export default Client;
+// export default Client;
+module.exports = Client;

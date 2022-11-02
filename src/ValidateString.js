@@ -11,10 +11,13 @@ const IllegalChars = [
     "\u200f",
 ];
 
-export default function ValidateString(string) {
+function ValidateString(string) {
     for (let i = 0; i < IllegalChars.length; i++) {
         const char = IllegalChars[i];
         string = string.replaceAll(char, "");
     }
     return string;
 }
+
+// export default ValidateString;
+module.exports = ValidateString;
