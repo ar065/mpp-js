@@ -8,8 +8,7 @@ build({
     outdir: "build",
     platform: "node",
     target: ["node16"],
-    format: "cjs",
-    external: ["./node_modules/*"],
+    // external: ["./node_modules/*"],
 }).catch((e) => console.error(e));
 
 copyFile("./package.json", "./build/package.json", (e) => {
@@ -24,6 +23,8 @@ let packageJson = await import("./build/package.json", {
 // @ts-ignore
 packageJson = Object.assign({}, packageJson.default);
 packageJson.type = "commonjs";
+// @ts-ignore
+packageJson.dependencies = {};
 
 writeFile("./build/package.json", JSON.stringify(packageJson), (e) => {
     if (e) throw e;
