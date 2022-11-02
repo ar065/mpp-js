@@ -22,9 +22,8 @@ let packageJson = await import("./build/package.json", {
 });
 
 // @ts-ignore
-packageJson = Object.assign({}, packageJson);
-// @ts-ignore
-packageJson.default.type = "commonjs";
+packageJson = Object.assign({}, packageJson.default);
+packageJson.type = "commonjs";
 
 writeFile("./build/package.json", JSON.stringify(packageJson), (e) => {
     if (e) throw e;
