@@ -6,12 +6,14 @@ class Client extends EventEmitter {
     /**
      * @param {Object} options Options for client.
      * @param {string} [options.uri] Websocket server address.
+     * @param {boolean} [options.unsafe] Whether to run without token.
      * @param {string} options.token Your bot token.
      */
     constructor(options) {
         super();
 
         this.uri = options.uri || "wss://mppclone.com:8443/";
+        this.unsafe = options.unsafe || false;
         this.token = options.token;
 
         this.ws = null;
@@ -178,6 +180,9 @@ class Client extends EventEmitter {
             self.removeParticipant(msg.p);
         });
         this.on("b", function (msg) {
+            if (!self.token && !self.unsafe) {
+                throw "Token not provided with options. Set unsafe to true to ignore this message.";
+            }
             self.sendArray([{
                 m: "hi",
                 token: self.token
@@ -410,4 +415,8 @@ class Client extends EventEmitter {
     };
 };
 
-export default Client;
+if (module.exports) {
+    module.exports = Client;
+} else {
+    export default Client;
+}
