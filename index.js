@@ -1,21 +1,24 @@
 import WebSocket from "ws";
 import { EventEmitter } from "events";
 import ValidateString from "./src/ValidateString.js";
-import RateLimits from "./src/RateLimits.js";
+import { Http, WebSocket as wsRCs } from "./src/ResponseCodes.js";
 
 class Client extends EventEmitter {
     /**
      * @param {Object} options Options for client.
      * @param {string} [options.uri] Websocket server address.
+     * @param {boolean} [options.unsafe] Whether to run without token.
      * @param {string} options.token Your bot token.
      */
     constructor(options) {
         super();
 
         this.uri = options.uri || "wss://mppclone.com:8443/";
+        this.unsafe = options.unsafe || false;
         this.token = options.token;
 
-        this.RateLimits = new RateLimits();
+        this.httpResponseCodes = Http;
+        this.webSocketResponseCodes = wsRCs;
 
         this.ws = null;
         this.user = null;
@@ -181,6 +184,9 @@ class Client extends EventEmitter {
             self.removeParticipant(msg.p);
         });
         this.on("b", function (msg) {
+            if (!self.token && !self.unsafe) {
+                throw "Token not provided with options. Set unsafe to true to ignore this message.";
+            }
             self.sendArray([{
                 m: "hi",
                 token: self.token
@@ -197,7 +203,6 @@ class Client extends EventEmitter {
     };
 
     setChannel(id, set) {
-        if (!this.RateLimits.ChangeChannel.spend(1)) return false;
         this.desiredChannelId = id || this.desiredChannelId || "lobby";
         this.desiredChannelSettings = set || this.desiredChannelSettings || null;
         this.sendArray([{
@@ -327,7 +332,6 @@ class Client extends EventEmitter {
 
     startNote(note, vel) {
         if (typeof note !== 'string') return false;
-        if (!this.RateLimits.Note.spend(1)) return false;
         if (this.isConnected()) {
             vel = typeof vel === "undefined" ? undefined : +vel.toFixed(3);
             if (!this.noteBufferTime) {
@@ -350,7 +354,6 @@ class Client extends EventEmitter {
 
     stopNote(note) {
         if (typeof note !== 'string') return false;
-        if (!this.RateLimits.Note.spend(1)) return false;
         if (this.isConnected()) {
             if (!this.noteBufferTime) {
                 this.noteBufferTime = Date.now();
@@ -378,37 +381,31 @@ class Client extends EventEmitter {
     };
 
     sendChat(message) {
-        if (!this.RateLimits.Chat.spend(1)) return false;
         this.sendArray([{m: "a", message: ValidateString(message)}]);
         return true;
     };
     
     userset(set) {
-        if (!this.RateLimits.Userset.spend(1)) return false;
         this.sendArray([{m: "userset", set}]);
         return true;
     };
     
     moveMouse(x, y) {
-        if (!this.RateLimits.Mouse.spend(1)) return false;
         this.sendArray([{m: "m", x, y}]);
         return true;
     };
     
     kickBan(_id, ms) {
-        if (!this.RateLimits.Kickban.spend(1)) return false;
         this.sendArray([{m: "kickban", _id, ms}]);
         return true;
     };
     
     chown(id) {
-        if (!this.RateLimits.Chown.spend(1)) return false;
         this.sendArray([{m: "chown", id}]);
         return true;
     };
     
     chset(set) {
-        if (!this.RateLimits.Chset.spend(1)) return false;
         this.sendArray([{m: "chset", set}]);
         return true;
     };
@@ -422,4 +419,8 @@ class Client extends EventEmitter {
     };
 };
 
-export default Client;
+if (module.exports) {
+    module.exports = Client;
+} else {
+    export default Client;
+}
