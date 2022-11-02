@@ -1,31 +1,33 @@
 {
-  "name": "@wolfy01/mpp-js",
-  "version": "2.1.4",
-  "description": "A client for multiplayerpiano, specfically for NodeJs enviroments.",
-  "main": "index.js",
-  "type": "module",
-  "scripts": {
-    "test": "echo \"Info: Sadly, there is not a good way to test with this package.\""
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/wolfy01/mpp-js.git"
-  },
-  "keywords": [
-    "MPP",
-    "MPPC",
-    "MPPClone",
-    "MPP-Client",
-    "Multiplayerpiano"
-  ],
-  "author": "Wolfy01",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/wolfy01/mpp-js/issues"
-  },
-  "homepage": "https://github.com/wolfy01/mpp-js#readme",
-  "packageManager": "yarn@3.2.0",
-  "dependencies": {
-    "ws": "^8.5.0"
-  }
+    "name": "@wolfy01/mpp-js",
+    "version": "2.1.4",
+    "description": "A client for multiplayerpiano, specfically for NodeJs enviroments.",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "build": "node build.js",
+        "test": "echo \"Info: Sadly, there is not a good way to test with this package.\""
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/wolfy01/mpp-js.git"
+    },
+    "keywords": [
+        "MPP",
+        "MPPC",
+        "MPPClone",
+        "MPP-Client",
+        "Multiplayerpiano"
+    ],
+    "author": "Wolfy01",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/wolfy01/mpp-js/issues"
+    },
+    "homepage": "https://github.com/wolfy01/mpp-js#readme",
+    "packageManager": "yarn@3.2.0",
+    "dependencies": {
+        "esbuild": "^0.15.12",
+        "ws": "^8.10.0"
+    }
 }

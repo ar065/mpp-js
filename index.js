@@ -1,7 +1,8 @@
 import WebSocket from "ws";
 import { EventEmitter } from "events";
 import ValidateString from "./src/ValidateString.js";
-import { Http, WebSocket as wsRCs } from "./src/ResponseCodes.js";
+// prettier-ignore
+import { HttpResponseCodes, WebSocketResponseCodes } from "./src/ResponseCodes.js";
 
 class Client extends EventEmitter {
     /**
@@ -17,8 +18,8 @@ class Client extends EventEmitter {
         this.unsafe = options.unsafe || false;
         this.token = options.token;
 
-        this.httpResponseCodes = Http;
-        this.webSocketResponseCodes = wsRCs;
+        this.httpResponseCodes = HttpResponseCodes;
+        this.webSocketResponseCodes = WebSocketResponseCodes;
 
         this.ws = null;
         this.user = null;
@@ -30,7 +31,7 @@ class Client extends EventEmitter {
         this.noteFlushInterval = null;
         this.desiredChannelSettings = null;
 
-        this['🐈'] = 0;
+        this["🐈"] = 0;
         this.noteBufferTime = 0;
         this.serverTimeOffset = 0;
         this.connectionAttempts = 0;
@@ -46,42 +47,43 @@ class Client extends EventEmitter {
 
         this.offlineSettings = {
             channel: {
-                color: "#ecfaed"
+                color: "#ecfaed",
             },
             participant: {
                 _id: "",
                 name: "",
-                color: "#777"
-            }
+                color: "#777",
+            },
         };
     }
 
     isConnected() {
         return this.ws && this.ws.readyState === WebSocket.OPEN;
-    };
+    }
 
     isConnecting() {
         return this.ws && this.ws.readyState === WebSocket.CONNECTING;
-    };
+    }
 
     start() {
         this.canConnect = true;
         if (!this.connectionTime) {
             this.connect();
         }
-    };
+    }
 
     stop() {
         this.canConnect = false;
-        this.ws.close();
-    };
+        if (this.ws) this.ws.close();
+    }
 
     connect() {
-        if (!this.canConnect || this.isConnected() || this.isConnecting()) return;
+        if (!this.canConnect || this.isConnected() || this.isConnecting())
+            return;
         const self = this;
 
         this.ws = new WebSocket(this.uri, {
-            origin: "https://www.multiplayerpiano.com"
+            origin: "https://www.multiplayerpiano.com",
         });
 
         this.ws.addEventListener("close", function (evt) {
@@ -113,7 +115,7 @@ class Client extends EventEmitter {
         });
         this.ws.addEventListener("error", function (err) {
             self.emit("wserror", err);
-            self.ws.close(); // self.ws.emit("close");
+            if (self.ws) self.ws.close(); // self.ws.emit("close");
         });
         this.ws.addEventListener("open", function (evt) {
             self.pingInterval = setInterval(function () {
@@ -125,11 +127,13 @@ class Client extends EventEmitter {
 
             self.noteFlushInterval = setInterval(function () {
                 if (self.noteBufferTime && self.noteBuffer.length > 0) {
-                    self.sendArray([{
-                        m: "n",
-                        t: self.noteBufferTime + self.serverTimeOffset,
-                        n: self.noteBuffer
-                    }]);
+                    self.sendArray([
+                        {
+                            m: "n",
+                            t: self.noteBufferTime + self.serverTimeOffset,
+                            n: self.noteBuffer,
+                        },
+                    ]);
                     self.noteBufferTime = 0;
                     self.noteBuffer = [];
                 }
@@ -138,13 +142,13 @@ class Client extends EventEmitter {
             self.emit("connect");
         });
         this.ws.addEventListener("message", async function (evt) {
-            const transmission = JSON.parse(evt.data);
+            const transmission = JSON.parse(evt.data.toString());
             for (let i = 0; i < transmission.length; i++) {
                 const msg = transmission[i];
                 self.emit(msg.m, msg);
             }
         });
-    };
+    }
 
     bindEventListeners() {
         const self = this;
@@ -187,38 +191,43 @@ class Client extends EventEmitter {
             if (!self.token && !self.unsafe) {
                 throw "Token not provided with options. Set unsafe to true to ignore this message.";
             }
-            self.sendArray([{
-                m: "hi",
-                token: self.token
-            }]);
+            self.sendArray([
+                {
+                    m: "hi",
+                    token: self.token,
+                },
+            ]);
         });
-    };
+    }
 
     send(raw) {
-        if (this.isConnected()) this.ws.send(raw);
-    };
+        if (this.isConnected() && this.ws) this.ws.send(raw);
+    }
 
     sendArray(arr) {
         this.send(JSON.stringify(arr));
-    };
+    }
 
     setChannel(id, set) {
         this.desiredChannelId = id || this.desiredChannelId || "lobby";
-        this.desiredChannelSettings = set || this.desiredChannelSettings || null;
-        this.sendArray([{
-            m: "ch",
-            _id: this.desiredChannelId,
-            set: this.desiredChannelSettings
-        }]);
+        this.desiredChannelSettings =
+            set || this.desiredChannelSettings || null;
+        this.sendArray([
+            {
+                m: "ch",
+                _id: this.desiredChannelId,
+                set: this.desiredChannelSettings,
+            },
+        ]);
         return true;
-    };
+    }
 
     getChannelSetting(key) {
         if (!this.isConnected() || !this.channel || !this.channel.settings) {
             return this.offlineSettings.channel[key];
         }
         return this.channel.settings[key];
-    };
+    }
 
     setChannelSettings(settings) {
         if (!this.isConnected() || !this.channel || !this.channel.settings) {
@@ -230,11 +239,11 @@ class Client extends EventEmitter {
             }
             this.chset(this.desiredChannelSettings);
         }
-    };
+    }
 
     getOwnParticipant() {
         return this.findParticipantById(this.participantId);
-    };
+    }
 
     setParticipants(ppl) {
         // remove participants who left
@@ -255,7 +264,7 @@ class Client extends EventEmitter {
         for (let i = 0; i < ppl.length; i++) {
             this.participantUpdate(ppl[i]);
         }
-    };
+    }
 
     countParticipants() {
         let count = 0;
@@ -263,7 +272,7 @@ class Client extends EventEmitter {
             if (this.ppl.hasOwnProperty(i)) ++count;
         }
         return count;
-    };
+    }
 
     participantUpdate(update) {
         let part = this.ppl[update.id] || null;
@@ -273,13 +282,13 @@ class Client extends EventEmitter {
             this.emit("participant added", part);
             this.emit("count", this.countParticipants());
         } else {
-            Object.keys(update).forEach(key => {
+            Object.keys(update).forEach((key) => {
                 part[key] = update[key];
             });
             if (!update.tag) delete part.tag;
             if (!update.vanished) delete part.vanished;
         }
-    };
+    }
 
     participantMoveMouse(update) {
         const part = this.ppl[update.id] || null;
@@ -287,7 +296,7 @@ class Client extends EventEmitter {
             part.x = update.x;
             part.y = update.y;
         }
-    };
+    }
 
     removeParticipant(id) {
         if (this.ppl.hasOwnProperty(id)) {
@@ -296,19 +305,28 @@ class Client extends EventEmitter {
             this.emit("participant removed", part);
             this.emit("count", this.countParticipants());
         }
-    };
+    }
 
     findParticipantById(id) {
         return this.ppl[id] || this.offlineSettings.participant;
-    };
+    }
 
     isOwner() {
-        return this.channel && this.channel.crown && this.channel.crown.participantId === this.participantId;
-    };
+        return (
+            this.channel &&
+            this.channel.crown &&
+            this.channel.crown.participantId === this.participantId
+        );
+    }
 
     preventsPlaying() {
-        return this.isConnected() && !this.isOwner() && this.getChannelSetting("crownsolo") === true && !this.permissions.playNotesAnywhere;
-    };
+        return (
+            this.isConnected() &&
+            !this.isOwner() &&
+            this.getChannelSetting("crownsolo") === true &&
+            !this.permissions.playNotesAnywhere
+        );
+    }
 
     receiveServerTime(time) {
         const self = this;
@@ -328,99 +346,97 @@ class Client extends EventEmitter {
                 self.serverTimeOffset = target;
             }
         }, step_ms);
-    };
+    }
 
     startNote(note, vel) {
-        if (typeof note !== 'string') return false;
+        if (typeof note !== "string") return false;
         if (this.isConnected()) {
             vel = typeof vel === "undefined" ? undefined : +vel.toFixed(3);
             if (!this.noteBufferTime) {
                 this.noteBufferTime = Date.now();
                 this.noteBuffer.push({
                     n: note,
-                    v: vel
+                    v: vel,
                 });
             } else {
                 this.noteBuffer.push({
                     d: Date.now() - this.noteBufferTime,
                     n: note,
-                    v: vel
+                    v: vel,
                 });
             }
             return true;
         }
         return false;
-    };
+    }
 
     stopNote(note) {
-        if (typeof note !== 'string') return false;
+        if (typeof note !== "string") return false;
         if (this.isConnected()) {
             if (!this.noteBufferTime) {
                 this.noteBufferTime = Date.now();
                 this.noteBuffer.push({
                     n: note,
-                    s: 1
+                    s: 1,
                 });
             } else {
                 this.noteBuffer.push({
                     d: Date.now() - this.noteBufferTime,
                     n: note,
-                    s: 1
+                    s: 1,
                 });
             }
             return true;
         }
         return false;
-    };
+    }
 
     sendPing() {
-        this.sendArray([{
-            m: "t",
-            e: Date.now()
-        }]);
-    };
+        this.sendArray([
+            {
+                m: "t",
+                e: Date.now(),
+            },
+        ]);
+    }
 
     sendChat(message) {
-        this.sendArray([{m: "a", message: ValidateString(message)}]);
+        this.sendArray([{ m: "a", message: ValidateString(message) }]);
         return true;
-    };
-    
+    }
+
     userset(set) {
-        this.sendArray([{m: "userset", set}]);
+        this.sendArray([{ m: "userset", set }]);
         return true;
-    };
-    
+    }
+
     moveMouse(x, y) {
-        this.sendArray([{m: "m", x, y}]);
+        this.sendArray([{ m: "m", x, y }]);
         return true;
-    };
-    
+    }
+
     kickBan(_id, ms) {
-        this.sendArray([{m: "kickban", _id, ms}]);
+        this.sendArray([{ m: "kickban", _id, ms }]);
         return true;
-    };
-    
+    }
+
     chown(id) {
-        this.sendArray([{m: "chown", id}]);
+        this.sendArray([{ m: "chown", id }]);
         return true;
-    };
-    
+    }
+
     chset(set) {
-        this.sendArray([{m: "chset", set}]);
+        this.sendArray([{ m: "chset", set }]);
         return true;
-    };
+    }
 
     setName(name) {
-        return this.userset({name});
-    };
+        return this.userset({ name });
+    }
 
     setColor(color) {
-        return this.userset({color});
-    };
-};
-
-if (module.exports) {
-    module.exports = Client;
-} else {
-    export default Client;
+        return this.userset({ color });
+    }
 }
+
+export default Client;

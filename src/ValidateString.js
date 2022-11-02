@@ -8,7 +8,7 @@ const IllegalChars = [
     "\u2066",
     "\u2067",
     "\u202b",
-    "\u200f"
+    "\u200f",
 ];
 
 export default function ValidateString(string) {

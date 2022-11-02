@@ -1,9 +1,9 @@
-export const Http = {
+export const HttpResponseCodes = {
     BadRequest: 400,
-    ToManyRequests: 429
-}
+    ToManyRequests: 429,
+};
 
-export const WebSocket = {
+export const WebSocketResponseCodes = {
     ServerClosing: 4000,
     TooManyUniqueUsersPerHour: 4001,
     TooManyBytes: 4002,
@@ -11,5 +11,5 @@ export const WebSocket = {
     TimedOut: 4004,
     TooManyMessages: 4007,
     Banned: 4008,
-    ClientLimitReached: 4009
-}
+    ClientLimitReached: 4009,
+};
