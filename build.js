@@ -15,3 +15,7 @@ build({
 copyFile("./package.json", "./build/package.json", (e) => {
     if (e) throw e;
 });
+
+copyFile("./README.md", "./build/README.md", (e) => {
+    if (e) throw e;
+});
