@@ -1,6 +1,6 @@
 {
   "name": "@wolfy01/mpp-js",
-  "version": "2.0.4",
+  "version": "2.1.4",
   "description": "A client for multiplayerpiano, specfically for NodeJs enviroments.",
   "main": "index.js",
   "type": "module",
