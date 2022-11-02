@@ -1,9 +1,9 @@
 {
     "name": "@wolfy01/mpp-js",
-    "version": "2.1.9",
+    "version": "2.2.0",
     "description": "A client for multiplayerpiano, specfically for NodeJs enviroments.",
     "main": "index.js",
-    "type": "module",
+    "type": "commonjs",
     "scripts": {
         "test": "echo \"Info: Sadly, there is not a good way to test with this package.\""
     },
